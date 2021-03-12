@@ -112,8 +112,11 @@ def interactive_cmd(data,iso,snr0,sharp0,round0,crowd0,dmod=29.6,
     
     zoomslide_xmin = FS(0, xmin, 0.5, 0, 'Color Min')
     zoomslide_xmax = FS(0, xmax, 0.5, 0, 'Color Max')
-    zoomslide_ymin = FS(0, ymin, 0.5, 0, 'Mag Min')
-    zoomslide_ymax = FS(0, ymax, 0.5, 0, 'Mag Max')
+    zoomslide_ymin = FS(0, ymin, 0.5, 0, 'Brightest')
+    zoomslide_ymax = FS(0, ymax, 0.5, 0, 'Dimmest')
+    zoombox1 = ipw.VBox([zoomslide_xmin, zoomslide_xmax])
+    zoombox2 = ipw.VBox([zoomslide_ymin, zoomslide_ymax])
+    zoom_ui = ipw.HBox([zoombox1, zoombox2])
     
     #xrangeslide = ipw.FloatRangeSlider(value=[xmin,xmax], min=xmin, max=xmax, 
     #                                   step=0.1, description='X Range',
@@ -121,11 +124,8 @@ def interactive_cmd(data,iso,snr0,sharp0,round0,crowd0,dmod=29.6,
     #yrangeslide = ipw.FloatRangeSlider(value=[ymin,ymax], min=ymin, max=ymax, 
     #                                   step=0.1, description='Y Range',
     #                                   readout_format='.1f', continuous_update=False)
-    #zoom_ui = ipw.HBox([xrangeslide,yrangeslide])
+    #zoom_ui = ipw.HBox([xrangeslide, yrangeslide])
     
-    zoombox1 = ipw.VBox([zoomslide_xmin, zoomslide_xmax])
-    zoombox2 = ipw.VBox([zoomslide_ymin, zoomslide_ymax])
-    zoom_ui = ipw.HBox([zoombox1, zoombox2])
     zoom_accord = ipw.Accordion(children=[zoom_ui])
     zoom_accord.set_title(0, 'Change Limits')
     
@@ -150,7 +150,7 @@ def interactive_cmd(data,iso,snr0,sharp0,round0,crowd0,dmod=29.6,
         """
         Filter1, Filter2 = COLUMNS(filter1,filter2)
         
-        grab = data[(data[Filter1] < 99.999) & (data[Filter2] < 99.999)]
+        grab = data[(data[Filter1] < 99.999) & (data[Filter2] < 99.999)] # remove non-detections
         cut1 = (grab[Filter1+1]>SNR) & ((grab[Filter1+2])**2<Sharp) & ((grab[Filter1+3])**2<Round) & (grab[Filter1+4]<Crowd)
         cut2 = (grab[Filter2+1]>SNR) & ((grab[Filter2+2])**2<Sharp) & ((grab[Filter2+3])**2<Round) & (grab[Filter2+4]<Crowd)
         passed = grab[cut1 & cut2]
@@ -199,7 +199,7 @@ def interactive_cmd(data,iso,snr0,sharp0,round0,crowd0,dmod=29.6,
         
         if zoomRIGHT:
             ax[1].set_xlim(ax[0].get_xlim()[0]-1, ax[0].get_xlim()[1]+2)
-            ax[1].set_ylim(ax[0].get_ylim()[0]+1, ax[0].get_ylim()[1]-2)
+            ax[1].set_ylim(ax[0].get_ylim()[0]+1, ax[0].get_ylim()[1]-1)
             
         return 
     
@@ -217,3 +217,4 @@ def interactive_cmd(data,iso,snr0,sharp0,round0,crowd0,dmod=29.6,
     
     display(all_widgets,out)
     return
+  
