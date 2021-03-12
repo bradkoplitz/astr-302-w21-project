@@ -79,9 +79,10 @@ def ISOCHRONE_COLUMNS(filter1,filter2):
     column2 = columns[filter2]
     return column1, column2
 
+
 def interactive_cmd(data,iso,snr0,sharp0,round0,crowd0,dmod=29.6,
                     snrmax=10,sharpmax=1.5,roundmax=10,crowdmax=3,
-                    xmin=4,xmax=4,ymin=8,ymax=8,
+                    xmin=8,xmax=8,ymin=8,ymax=8,
                     filters=['F275W','F336W','F438W','F555W','F814W']):
     """
     Makes interactive CMD for NGC 3344 Data.
@@ -183,7 +184,7 @@ def interactive_cmd(data,iso,snr0,sharp0,round0,crowd0,dmod=29.6,
             ax[1].legend(loc=0)
             
         ax[0].set_xlim(ax[0].get_xlim()[0]+zoom_xmin, ax[0].get_xlim()[1]-zoom_xmax)
-        ax[0].set_ylim(ax[0].get_ylim()[0]-zoom_ymin, ax[0].get_ylim()[1]+zoom_ymax)
+        ax[0].set_ylim(ax[0].get_ylim()[0]+zoom_ymin, ax[0].get_ylim()[1]-zoom_ymax)
         
         #ax[0].set_xlim(xrange[0],xrange[1])
         #ax[0].set_ylim(yrange[0],yrange[1])
@@ -192,8 +193,9 @@ def interactive_cmd(data,iso,snr0,sharp0,round0,crowd0,dmod=29.6,
             ax[i].invert_yaxis()
             ax[i].set_xlabel('${0}-{1}$'.format(filter1,filter2),fontsize=14)
             ax[i].set_ylabel('${0}$'.format(filter2),fontsize=14)
-        ax[0].set_title('Kept',fontsize=15)
-        ax[1].set_title('Removed',fontsize=15)
+            ax[i].tick_params(axis='both', labelsize=13) 
+        ax[0].set_title('Kept',fontsize=16)
+        ax[1].set_title('Removed',fontsize=16)
         
         if zoomRIGHT:
             ax[1].set_xlim(ax[0].get_xlim()[0]-1, ax[0].get_xlim()[1]+2)
